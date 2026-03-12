@@ -1,0 +1,90 @@
+아이고, 계속 아래에 있군요! 정말 답답하시겠어요. "응애" 개발자 시절에는 이 레이아웃 고정이 가장 속 썩이는 부분 중 하나예요.
+
+버튼이 계속 아래로 내려가는 이유는 보통 웹 브라우저가 화면의 가로 폭을 충분하지 않다고 판단해서 '줄 바꿈'을 해버리기 때문입니다. 이번에는 아예 **표(Table)**처럼 구조를 딱 고정해서, 화면이 좁아지더라도 절대 아래로 못 도망가게 강제 조치를 취해볼게요.
+
+style.css의 내용을 아래 코드로 완전히 싹 다 비우고 다시 복사해서 넣어주세요.
+
+[style.css] (이걸로 무조건 해결!)
+CSS
+/* 전체 화면 설정 */
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 1. 컨테이너: 가로 폭을 아예 숫자로 고정해버립니다. */
+.game-container {
+    display: flex;
+    flex-direction: row;     /* 가로 배치 */
+    flex-wrap: nowrap;       /* 줄바꿈 절대 금지 */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    
+    /* 화면 너비가 좁아도 이 크기를 유지하라고 강제함 */
+    width: 850px;            /* 캔버스(500) + 버튼(300) + 간격(50) */
+    margin-top: 20px;
+}
+
+/* 2. 캐릭터 화면: 500px 고정 */
+.canvas {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    border: 5px solid #ffd1dc;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;          /* 절대 작아지지 마! */
+}
+
+.layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 3. 버튼 영역: 300px 고정 및 스크롤 */
+.controls {
+    width: 300px;            /* 너비 딱 고정 */
+    height: 500px;           /* 캐릭터 높이랑 맞춤 */
+    overflow-y: scroll;      /* 내용이 많으면 무조건 스크롤바 생성 */
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;  /* 패딩 때문에 너비가 안 늘어나게 함 */
+    flex-shrink: 0;          /* 절대 작아지지 마! */
+}
+
+.category {
+    margin-bottom: 20px;
+}
+
+h3 { 
+    margin-top: 0; 
+    font-size: 14px; 
+    color: #888; 
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 3px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+}
+
+button:hover {
+    background-color: #fff0f3;
+}

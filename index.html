@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>캐릭터 커스텀 시스템 v4.2</title>
+    <style>
+        body {
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Malgun Gothic', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { color: #444; margin-bottom: 20px; }
+
+        .game-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            width: 1050px;
+            margin-top: 10px;
+        }
+
+        .canvas {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background-color: #fff;
+            border: 8px solid #fff;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .controls {
+            width: 450px;
+            height: 650px;
+            overflow-y: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #eee;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .controls::-webkit-scrollbar { width: 8px; }
+        .controls::-webkit-scrollbar-thumb { background: #ffd1dc; border-radius: 10px; }
+
+        .category {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        h3 { 
+            font-size: 14px; 
+            color: #ff85a2; 
+            margin: 0 0 12px 0;
+            border-left: 4px solid #ff85a2;
+            padding-left: 10px;
+        }
+
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        button {
+            padding: 10px 14px;
+            cursor: pointer;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            background: #fdfdfd;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #fff0f3;
+            border-color: #ffb6c1;
+            color: #ff4d7d;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✨ 체리벨라 캐릭터 커스텀 ✨</h1>
+
+    <div class="game-container">
+        <div class="canvas">
+            <img src="empty.png" class="layer" id="layer_bg">
+            <img src="empty.png" class="layer" id="layer_bhair">
+            <img src="empty.png" class="layer" id="layer_wing">
+            <img src="body.png" class="layer" id="layer_body">
+            <img src="face1.png" class="layer" id="layer_face">
+            <img src="empty.png" class="layer" id="layer_eye">
+            <img src="empty.png" class="layer" id="layer_mouth">
+            <img src="empty.png" class="layer" id="layer_glasses">
+            <img src="empty.png" class="layer" id="layer_shoes">
+            <img src="empty.png" class="layer" id="layer_pants">
+            <img src="empty.png" class="layer" id="layer_top">
+            <img src="empty.png" class="layer" id="layer_coat">
+            <img src="empty.png" class="layer" id="layer_fhair">
+            <img src="empty.png" class="layer" id="layer_hat">
+            <img src="empty.png" class="layer" id="layer_head">
+            
+            <!-- 헤드 액세서리 레이어 추가 (가장 위쪽 배치) -->
+            <img src="empty.png" class="layer" id="layer_acc">
+
+            <img src="empty.png" class="layer" id="layer_left_hand">
+            <img src="empty.png" class="layer" id="layer_right_hand">
+        </div>
+
+        <div class="controls">
+            
+            <div class="category">
+                <h3>🖼️ 배경 (Background)</h3>
+                <div class="btn-group">
+                    <button onclick="change('bg', 'bg1.png')">배경 1</button>
+                    <button onclick="change('bg', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <!-- /* --- 헤드 액세서리 컨트롤 카테고리 추가 --- */ -->
+            <div class="category">
+                <h3>🎀 헤드 액세서리 (Head)</h3>
+                <div class="btn-group">
+                    <button onclick="change('head', 'head1.png')">헤드 1</button>
+                    <button onclick="change('head', 'head2.png')">헤드 2</button>
+                    <button onclick="change('head', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>🦋 날개 (Wing)</h3>
+                <div class="btn-group">
+                    <button onclick="change('wing', 'wing1.png')">날개 1</button>
+                    <button onclick="change('wing', 'wing2.png')">날개 2</button>
+                    <button onclick="change('wing', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>👀 눈 (Eye)</h3>
+                <div class="btn-group">
+                    <button onclick="change('eye', 'eye1.png')">눈 1</button>
+                    <button onclick="change('eye', 'eye2.png')">눈 2</button>
+                    <button onclick="change('eye', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>👄 입 (Mouth)</h3>
+                <div class="btn-group">
+                    <button onclick="change('mouth', 'mouth1.png')">입 1</button>
+                    <button onclick="change('mouth', 'mouth2.png')">입 2</button>
+                    <button onclick="change('mouth', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>💇‍♀️ 앞헤어 (Front Hair)</h3>
+                <div class="btn-group">
+                    <button onclick="change('fhair', 'fhair1.png')">앞헤어 1</button>
+                    <button onclick="change('fhair', 'fhair2.png')">앞헤어 2</button>
+                    <button onclick="change('fhair', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>💇‍♂️ 뒷헤어 (Back Hair)</h3>
+                <div class="btn-group">
+                    <button onclick="change('bhair', 'bhair1.png')">뒷헤어 1</button>
+                    <button onclick="change('bhair', 'bhair2.png')">뒷헤어 2</button>
+                    <button onclick="change('bhair', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+    <h3>🧥 코트 (Coat)</h3>
+    <div class="btn-group">
+        <button onclick="change('coat', 'coat1.png')">코트 1</button>
+        <button onclick="change('coat', 'coat2.png')">코트 2</button>
+        <button onclick="change('coat', 'empty.png')">비우기</button>
+    </div>
+</div>
+
+            <div class="category">
+                <h3>👕 상의 (Top)</h3>
+                <div class="btn-group">
+                    <button onclick="change('top', 'top1.png')">상의 1</button>
+                    <button onclick="change('top', 'top2.png')">상의 2</button>
+                    <button onclick="change('top', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>👖 하의 (Pants)</h3>
+                <div class="btn-group">
+                    <button onclick="change('pants', 'pants1.png')">하의 1</button>
+                    <button onclick="change('pants', 'pants2.png')">하의 2</button>
+                    <button onclick="change('pants', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>✋ 왼손 아이템 (Left Hand)</h3>
+                <div class="btn-group">
+                    <button onclick="change('left_hand', 'hand_l1.png')">왼손 아이템 1</button>
+                    <button onclick="change('left_hand', 'hand_l2.png')">왼손 아이템 2</button>
+                    <button onclick="change('left_hand', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>🗡️ 오른손 아이템 (Right Hand)</h3>
+                <div class="btn-group">
+                    <button onclick="change('right_hand', 'hand_r1.png')">오른손 아이템 1</button>
+                    <button onclick="change('right_hand', 'hand_r2.png')">오른손 아이템 2</button>
+                    <button onclick="change('right_hand', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>👟 신발 (Shoes)</h3>
+                <div class="btn-group">
+                    <button onclick="change('shoes', 'shoes1.png')">신발 1</button>
+                    <button onclick="change('shoes', 'shoes2.png')">신발 2</button>
+                    <button onclick="change('shoes', 'empty.png')">비우기</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function change(part, imageName) {
+            const target = document.getElementById('layer_' + part);
+            if (target) {
+                target.src = imageName;
+            }
+        }
+    </script>
+</body>
+</html>
